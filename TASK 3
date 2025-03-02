@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Book {
+public:
+    string title;
+    string author;
+    string isbn;
+
+    Book(string title, string author, string isbn)
+        : title(move(title)), author(move(author)), isbn(move(isbn)) {}
+};
+
+class Catalog {
+private:
+    vector<Book*> bookIndex;
+
+public:
+    void addBook(Book* book) {
+        bookIndex.push_back(book);
+    }
+
+    void removeBook(const string& isbn) {
+        for (size_t i = 0; i < bookIndex.size(); ++i) {
+            if (bookIndex[i]->isbn == isbn) {
+                bookIndex.erase(bookIndex.begin() + i);
+                break;
+            }
+        }
+    }
+
+    Book* findBook(const string& isbn) {
+        for (Book* book : bookIndex) {
+            if (book->isbn == isbn) {
+                return book;
+            }
+        }
+        return nullptr;
+    }
+};
+
+class Library {
+private:
+    string name;
+    string address;
+    Catalog catalog;  
+    vector<Book*> books; 
+
+public:
+    Library(string name, string address) : name(move(name)), address(move(address)) {}
+
+    void addBook(Book* book) {
+        books.push_back(book);
+        catalog.addBook(book);
+    }
+
+    void removeBook(const string& isbn) {
+        for (size_t i = 0; i < books.size(); ++i) {
+            if (books[i]->isbn == isbn) {
+                catalog.removeBook(isbn);
+                books.erase(books.begin() + i);
+                break;
+            }
+        }
+    }
+
+    Book* findBookInCatalog(const string& isbn) {
+        return catalog.findBook(isbn);
+    }
+
+    void displayBooks() {
+        cout << "Library: " << name << "\nBooks:\n";
+        for (const auto& book : books) {
+            cout << "- " << book->title << " by " << book->author << " (ISBN: " << book->isbn << ")\n";
+        }
+    }
+};
+
+int main() {
+    Library library("City Library", "123 Main St");
+
+    Book book1("Sherlock Holmes ", "F. Arthur Conon Doyle", "123456789");
+    Book book2("Harry Potter ", "J.K Rowling", "987654321");
+    Book book3("Jannat ke patay ", "Nimra Ahmed", "456789123");
+
+    library.addBook(&book1);
+    library.addBook(&book2);
+    library.addBook(&book3);
+
+    library.displayBooks();
+
+    cout << "\nSearching for book with ISBN 987654321...\n";
+    Book* foundBook = library.findBookInCatalog("987654321");
+    if (foundBook) {
+        cout << "Found: " << foundBook->title << " by " << foundBook->author << "\n";
+    } else {
+        cout << "Book not found in catalog.\n";
+    }
+
+    return 0;
+}
