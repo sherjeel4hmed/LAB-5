@@ -1,0 +1,217 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class MenuItem
+{
+public:
+    string name;
+    string type;
+    double price;
+
+    MenuItem(string name, string type, double price)
+        : name(name), type(type), price(price) {}
+
+    string getname() const { return name; }
+    string gettype() const { return type; }
+    double getprice() const { return price; }
+};
+
+class CoffeeShop
+{
+    const string name;
+    vector<MenuItem> menu;
+    vector<string> order;
+
+public:
+    CoffeeShop(string name, vector<MenuItem> menu) : name(name), menu(menu) {}
+
+    bool AddOrder(const string& name)
+    {
+        for (int i = 0; i < menu.size(); i++)
+        {
+            if (menu[i].getname() == name)
+            {
+                order.push_back(name);
+                cout << "Order Added: " << name << endl;
+                return true;
+            }
+        }
+        cout << "This item is currently unavailable: " << name << endl;
+        return false;
+    }
+
+    string fulfillOrder()
+    {
+        if (!order.empty())
+        {
+            string readyItem = order[0];
+            order.erase(order.begin());
+            return "The " + readyItem + " is ready!";
+        }
+        return "All orders have been fulfilled";
+    }
+
+    vector<string> ListOrders() const
+    {
+        return order;
+    }
+
+    double dueAmount() const
+    {
+        double total = 0.0;
+        for (int i = 0; i < order.size(); i++)
+        {
+            for (int j = 0; j < menu.size(); j++)
+            {
+                if (menu[j].name == order[i])
+                {
+                    total += menu[j].price;
+                    break;
+                }
+            }
+        }
+        return total;
+    }
+
+    string cheapestItem() const
+    {
+        if (menu.empty()) return "No items available";
+
+        int cheapestIndex = 0;
+        for (int i = 1; i < menu.size(); i++)
+        {
+            if (menu[i].getprice() < menu[cheapestIndex].getprice())
+            {
+                cheapestIndex = i;
+            }
+        }
+        return menu[cheapestIndex].getname();
+    }
+
+    vector<string> drinksOnly() const
+    {
+        vector<string> drinks;
+        for (int i = 0; i < menu.size(); i++)
+        {
+            if (menu[i].gettype() == "drink")
+            {
+                drinks.push_back(menu[i].getname());
+            }
+        }
+        return drinks;
+    }
+
+    vector<string> foodOnly() const
+    {
+        vector<string> foods;
+        for (int i = 0; i < menu.size(); i++)
+        {
+            if (menu[i].gettype() == "food")
+            {
+                foods.push_back(menu[i].getname());
+            }
+        }
+        return foods;
+    }
+
+    void displayMenu() const
+    {
+        cout << "\nMenu:\n";
+        cout << "Drinks:\n";
+        for (int i = 0; i < menu.size(); i++)
+        {
+            if (menu[i].gettype() == "drink")
+            {
+                cout << "- " << menu[i].getname() << " (Rs " << menu[i].getprice() << ")\n";
+            }
+        }
+
+        cout << "\nFood:\n";
+        for (int i = 0; i < menu.size(); i++)
+        {
+            if (menu[i].gettype() == "food")
+            {
+                cout << "- " << menu[i].getname() << " (Rs " << menu[i].getprice() << ")\n";
+            }
+        }
+    }
+
+    string getName() const
+    {
+        return name;
+    }
+};
+
+int main()
+{
+    vector<MenuItem> menuItems = {
+        {"Espresso", "drink", 120.0},
+        {"Cappuccino", "drink", 150.0},
+        {"Latte", "drink", 180.0},
+        {"Muffin", "food", 90.0},
+        {"Sandwich", "food", 200.0},
+        {"Cookie", "food", 50.0}};
+
+    CoffeeShop myShop("SarayA Cafe", menuItems);
+
+    int choice;
+    string itemName;
+
+    do
+    {
+        cout << "\nWelcome to " << myShop.getName() << "!\n";
+        cout << "1. Add Order\n";
+        cout << "2. View Menu (Drinks and Food)\n";
+        cout << "3. List Orders\n";
+        cout << "4. Fulfill Order\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter the item name to order: ";
+            cin >> itemName;
+            myShop.AddOrder(itemName);
+            break;
+
+        case 2:
+            myShop.displayMenu();
+            break;
+
+        case 3:
+        {
+            vector<string> orders = myShop.ListOrders();
+            if (orders.empty())
+            {
+                cout << "No orders placed yet.\n";
+            }
+            else
+            {
+                cout << "\nCurrent Orders:\n";
+                for (int i = 0; i < orders.size(); i++)
+                {
+                    cout << "- " << orders[i] << endl;
+                }
+            }
+            break;
+        }
+
+        case 4:
+            cout << myShop.fulfillOrder() << endl;
+            break;
+
+        case 5:
+            cout << "Thank you for visiting " << myShop.getName() << "!\n";
+            break;
+
+        default:
+            cout << "Invalid choice! Please try again.\n";
+            break;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
