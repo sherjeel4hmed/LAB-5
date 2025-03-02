@@ -1,0 +1,31 @@
+#include<iostream>
+using namespace std;
+class Engine{
+    bool is_running=false;
+public:
+void start(){
+    cout<<"Engine Started"<<endl;
+    is_running=true;
+}
+void stop(){
+    cout<<"Engine Stopped"<<endl;
+    is_running=false;
+}
+};
+class Car{
+private:
+Engine engine;
+public:
+void StartCar(){
+    engine.start();
+}
+void StopCar(){
+    engine.stop();
+}
+};
+
+int main(){
+ Car test;
+ test.StartCar();   
+ test.StopCar();
+}
