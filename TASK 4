@@ -1,0 +1,90 @@
+#include<iostream>
+#include<windows.h>
+using namespace std;
+class Blend{
+    string fruit_name[5];
+    public:
+    void select(){
+        int choice;
+        int i=0;
+        cout<<"Select Fruits to blend"<<endl;
+        do{
+        cout<<"1.Mango"<<endl;
+        cout<<"2.Apple"<<endl;
+        cout<<"3.Orange"<<endl;
+        cout<<"4.Pineapple"<<endl;
+        cout<<"5.Done"<<endl;
+        cout<<"Enter Your Choice: ";
+        cin>>choice; 
+        cout<<"\n";
+        if(choice==5){
+        if(i==0){
+        cout<<"Fruits not Selected "<<endl;
+        continue;
+        }
+        break;
+    }
+    if (i >= 5) {
+        cout << "You can select only up to 5 fruits.\n";
+        break;
+    }
+        switch (choice)
+        {
+        case 1:
+           fruit_name[i++]="Mango";
+        break;
+        case 3:
+        fruit_name[i++]="Orange";
+        break;
+        case 2:
+        fruit_name[i++]="Apple  ";
+        break;
+        case 4:
+        fruit_name[i++]="Pineapple";
+        break;
+        case 5:
+        return;
+        default:
+        cout << "Invalid choice, please try again"<<endl;
+            break;
+        }
+    } while(i!=5);
+    for(int j=0; j<i;j++)
+    cout<<fruit_name[j]<<", ";
+    cout<<"are selected"<<endl;
+}
+
+void blendJuice() {
+    cout << "\nBlending the juice...\n";
+    for (int i = 0; i < 5; i++) {
+        cout << "Blending... " << (i + 1) << " seconds\n";
+        Sleep(1000);
+    }
+    cout << "Blending completed!\n";
+}
+};
+class Grind {
+    public:
+        void grindJuice() {
+            cout << "\nGrinding the juice...\n";
+            Sleep(5000); 
+            cout << "Grinding completed!\n";
+        }
+    };
+class Juicemaker{
+    Blend blend;
+    Grind grind;
+
+    public:
+    void makeJuice(){
+        blend.select();
+    blend.blendJuice();
+     grind.grindJuice();
+    }
+    
+};
+int main() {
+    Juicemaker juicer;
+    juicer.makeJuice();
+    return 0;
+}
