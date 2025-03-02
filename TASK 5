@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+
+class Car {
+private:
+   mutable string engine;
+   mutable int horsepower;
+  mutable  int seating_capacity;
+   mutable int no_of_speakers;
+
+public:
+    Car(string eng, int hp, int capacity, int speakers): engine(eng), horsepower(hp), seating_capacity(capacity), no_of_speakers(speakers) {}
+
+    void Update()const{
+        cout<<"Enter new Engine name "<<endl;
+        cin>>engine;
+        cout << "Enter new Horsepower: ";
+        cin >> horsepower; 
+        cout << "Enter new Seating Capacity: ";
+        cin >> seating_capacity;
+        cout << "Enter new Number of Speakers: ";
+        cin >> no_of_speakers;
+    }
+
+    void display() const {
+        cout << "\nCar Details:\n";
+        cout << "Engine: " << engine << endl;
+        cout << "Horsepower: " << horsepower << endl;
+        cout << "Seating Capacity: " << seating_capacity << endl;
+        cout << "Number of Speakers: " << no_of_speakers << endl;
+    }
+
+    };
+    int main() {
+        Car myCar("Bugatti", 1500, 2, 6);
+        myCar.display();
+        myCar.Update();
+        myCar.display();
+        return 0;
+    }
